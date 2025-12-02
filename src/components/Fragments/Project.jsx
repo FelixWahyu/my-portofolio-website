@@ -1,6 +1,7 @@
 import { ExternalLink, Github } from "lucide-react";
 import { ProjectsData } from "../data/ProjectData";
 import Button from "../Elements/Button";
+import Link from "../Elements/NavLink/Link";
 
 export const Projects = () => {
   return (
@@ -23,18 +24,20 @@ export const Projects = () => {
                 animationDelay: `${index * 150}ms`,
               }}
             >
-              <div className={`h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center relative overflow-hidden`}>
+              <div className="h-48 relative overflow-hidden">
+                <img src={project.image} alt={project.title} className="w-full h-auto object-cover group-hover:scale-102 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-                <div className="relative z-10 text-6xl font-bold text-white/20">{project.title.charAt(0)}</div>
                 <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Button rounded="px-4 py-2 rounded-lg">
                     <ExternalLink className="w-5 h-5 mr-2" />
                     Live Demo
                   </Button>
-                  <Button rounded="px-4 py-2 rounded-lg">
-                    <Github className="w-5 h-5 mr-2" />
-                    Code
-                  </Button>
+                  <a href={project.link} target="_blank">
+                    <Button rounded="px-4 py-2 rounded-lg">
+                      <Github className="w-5 h-5 mr-2" />
+                      Code
+                    </Button>
+                  </a>
                 </div>
               </div>
 
