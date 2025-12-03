@@ -3,6 +3,7 @@ import HeroSection from "../components/Fragments/Hero";
 import AboutSection from "../components/Fragments/About";
 import { Skills } from "../components/Fragments/Skills";
 import { Projects } from "../components/Fragments/Project";
+import { Footer } from "../components/Fragments/Footer";
 
 function Index() {
   return (
@@ -12,6 +13,7 @@ function Index() {
         <AboutSection></AboutSection>
         <Skills></Skills>
         <Projects></Projects>
+        <Footer></Footer>
       </LayoutMain>
     </>
   );

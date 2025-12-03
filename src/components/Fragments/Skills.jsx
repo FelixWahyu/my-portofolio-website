@@ -6,7 +6,7 @@ export const Skills = () => {
     <section id="skills" className="py-20 px-4 relative">
       <div className="container mx-auto max-w-6xl relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          <span className="text-blue-500">Skills & Expertise</span>
+          <span className="text-blue-500">Keahlian & Kemampuan</span>
         </h2>
 
         <div className="space-y-8">
@@ -27,7 +27,7 @@ export const Skills = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-foreground mb-1">{skill.name}</h3>
-                      <span className="text-sm text-blue-500 font-semibold">Proficiency: {skill.level}%</span>
+                      <span className="text-sm text-blue-500 font-semibold">Kemahiran: {skill.level}%</span>
                     </div>
                   </div>
 

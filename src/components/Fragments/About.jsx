@@ -29,11 +29,11 @@ function AboutSection() {
             <div className="flex gap-4 pt-4">
               <div className="glass px-6 py-4 rounded-xl border border-blue-500/70">
                 <p className="text-3xl font-bold text-blue-600">1</p>
-                <p className="text-sm text-muted-foreground">Years Experience</p>
+                <p className="text-sm text-muted-foreground">Tahun Pengalaman</p>
               </div>
               <div className="glass px-6 py-4 rounded-xl border border-blue-500/70">
                 <p className="text-3xl font-bold text-blue-600">2+</p>
-                <p className="text-sm text-muted-foreground">Projects Completed</p>
+                <p className="text-sm text-muted-foreground">Proyek Selesai</p>
               </div>
             </div>
           </div>

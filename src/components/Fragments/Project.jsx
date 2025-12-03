@@ -12,7 +12,7 @@ export const Projects = () => {
 
       <div className="container mx-auto max-w-6xl relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          <span className="text-blue-500">Featured Projects</span>
+          <span className="text-blue-500">Proyek Unggulan</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -30,12 +30,12 @@ export const Projects = () => {
                 <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Button rounded="px-4 py-2 rounded-lg">
                     <ExternalLink className="w-5 h-5 mr-2" />
-                    Live Demo
+                    Demo
                   </Button>
                   <a href={project.link} target="_blank">
                     <Button rounded="px-4 py-2 rounded-lg">
                       <Github className="w-5 h-5 mr-2" />
-                      Code
+                      Kode
                     </Button>
                   </a>
                 </div>
