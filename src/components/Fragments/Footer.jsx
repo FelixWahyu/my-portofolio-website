@@ -35,7 +35,7 @@ export const Footer = () => {
           </ul>
         </div>
         <div>
-          <h3 className="mb-2 text-lg font-medium">Sosial Media</h3>
+          <h3 className="mb-3 text-lg font-medium">Sosial Media</h3>
           <div className="flex items-center gap-3">
             <Link
               links="https://github.com/FelixWahyu"
