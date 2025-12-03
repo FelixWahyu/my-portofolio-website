@@ -4,11 +4,13 @@ import AboutSection from "../components/Fragments/About";
 import { Skills } from "../components/Fragments/Skills";
 import { Projects } from "../components/Fragments/Project";
 import { Footer } from "../components/Fragments/Footer";
+import Navbar from "../components/Fragments/Navbar";
 
 function Index() {
   return (
     <>
       <LayoutMain>
+        <Navbar></Navbar>
         <HeroSection></HeroSection>
         <AboutSection></AboutSection>
         <Skills></Skills>
