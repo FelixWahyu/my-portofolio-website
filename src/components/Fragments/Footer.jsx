@@ -3,39 +3,40 @@ import { Github, Linkedin, Instagram, Youtube } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <div id="footer" className="bg-gray-900 px-12 py-16 align-middle text-gray-100">
+    <div id="footer" className="bg-gray-900 px-12 py-16 align-middle">
       <div className="flex-col flex lg:flex-row gap-4 lg:gap-0 justify-between items-start mb-6">
         <div>
-          <h2 className="text-2xl font-semibold">Felix Wahyu Sejati,S.Kom.</h2>
-          <h3 className="mt-1">Web Development Enthusiast</h3>
+          <h2 className="text-2xl font-semibold text-gray-100">MyPortfolio</h2>
+          <h3 className="mt-1 text-lg text-gray-100">Felix Wahyu Sejati,S.Kom.</h3>
+          <p className="mt-1 font-light text-gray-100">Web Development Enthusiast</p>
         </div>
         <div>
-          <h3 className="mb-2 text-lg font-medium">Menu</h3>
+          <h3 className="mb-2 text-lg font-medium text-gray-100">Menu</h3>
           <div className="flex flex-col gap-1">
-            <Link links="#hero" classname="hover:underline">
+            <Link links="#hero" classname="text-gray-100 hover:underline">
               Beranda
             </Link>
-            <Link links="#about" classname="hover:underline">
+            <Link links="#about" classname="text-gray-100 hover:underline">
               Tentang
             </Link>
-            <Link links="#skills" classname="hover:underline">
+            <Link links="#skills" classname="text-gray-100 hover:underline">
               Keahlian
             </Link>
-            <Link links="#projects" classname="hover:underline">
+            <Link links="#projects" classname="text-gray-100 hover:underline">
               Proyek
             </Link>
           </div>
         </div>
         <div className="max-w-md">
-          <h3 className="mb-2 text-lg font-medium">Kontak</h3>
-          <ul className="flex flex-col gap-2">
+          <h3 className="mb-2 text-lg font-medium text-gray-100">Kontak</h3>
+          <ul className="flex flex-col gap-2 text-gray-100">
             <li>Jl.Sumardi No.16,Dukuhwaluh,Kecamatan Kembaran,Purwokerto</li>
             <li>felixwahyusejati89@gmail.com</li>
             <li>+62858-6990-6592</li>
           </ul>
         </div>
         <div>
-          <h3 className="mb-3 text-lg font-medium">Sosial Media</h3>
+          <h3 className="mb-3 text-lg font-medium text-gray-100">Sosial Media</h3>
           <div className="flex items-center gap-3">
             <Link
               links="https://github.com/FelixWahyu"
@@ -69,7 +70,7 @@ export const Footer = () => {
         </div>
       </div>
       <div className="py-4 border-t border-gray-100 text-center">
-        <p>Created by @2025 Felix Wahyu Sejati. All Rights Reserved</p>
+        <p className="text-gray-100">Created by @2025 Felix Wahyu Sejati. All Rights Reserved</p>
       </div>
     </div>
   );
