@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  email      String    @unique @db.VarChar(100)
+  password   String    @db.VarChar(100)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  sessions   Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("session")
+}
