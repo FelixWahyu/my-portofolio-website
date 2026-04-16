@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
+const aboutRoutes = require('./routes/aboutRoutes');
+const path = require('path');
 
 dotenv.config();
 
@@ -26,10 +28,12 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth/login', loginLimiter); // Apply limiter specifically to login
 app.use('/api/auth', authRoutes);
+app.use('/api/abouts', aboutRoutes);
 
 app.get('/', (req, res) => {
   res.send('Portfolio Backend API is running');

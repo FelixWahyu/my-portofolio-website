@@ -5,6 +5,7 @@ import "./index.css";
 import Index from "./pages";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import Dashboard from "./pages/Admin/Dashboard";
+import AboutManagement from "./pages/Admin/abouts/AboutManagement";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -23,6 +24,14 @@ createRoot(document.getElementById("root")).render(
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/abouts" 
+            element={
+              <ProtectedRoute>
+                <AboutManagement />
               </ProtectedRoute>
             } 
           />
