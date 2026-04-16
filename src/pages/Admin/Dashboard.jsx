@@ -1,14 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    await logout();
+    // Redirect is handled naturally if the app re-renders or via ProtectedRoute
   };
 
   return (
@@ -37,11 +35,11 @@ const Dashboard = () => {
           <h1 className="text-lg font-semibold text-gray-800">Dashboard Overview</h1>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-sm font-bold text-gray-900">{user.name || 'Admin'}</div>
-              <div className="text-xs text-gray-500">{user.email || 'admin@example.com'}</div>
+              <div className="text-sm font-bold text-gray-900">{user?.name || 'Admin'}</div>
+              <div className="text-xs text-gray-500">{user?.email || 'admin@example.com'}</div>
             </div>
             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-              {user.name ? user.name.charAt(0).toUpperCase() : 'A'}
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
             </div>
           </div>
         </header>

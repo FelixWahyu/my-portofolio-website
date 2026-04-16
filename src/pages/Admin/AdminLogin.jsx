@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -8,13 +8,13 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, isLoggedIn } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    if (isLoggedIn) {
       navigate('/admin/dashboard', { replace: true });
     }
-  }, [navigate]);
+  }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,9 +22,7 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      await login(email, password);
       navigate('/admin/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');

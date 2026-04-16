@@ -1,27 +1,19 @@
 const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const authService = require('../services/authService');
 
 const verifyAuth = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const token = req.cookies.token;
+    
+    if (!token) {
       return res.status(401).json({ message: 'Unauthorized: No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
-    
     // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Check if session exists in DB
-    const session = await prisma.session.findFirst({
-      where: { 
-        token: token,
-        userId: decoded.userId
-      },
-    });
+    const session = await authService.findSession(token, decoded.userId);
 
     if (!session) {
       return res.status(401).json({ message: 'Unauthorized: Session expired or invalid' });
