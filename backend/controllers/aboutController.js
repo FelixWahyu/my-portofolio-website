@@ -1,4 +1,7 @@
 const aboutService = require('../services/aboutService');
+const fs = require('fs');
+const path = require('path');
+
 
 const getAbouts = async (req, res, next) => {
   try {
@@ -60,6 +63,15 @@ const updateAbout = async (req, res, next) => {
 
     if (req.file) {
       updateData.image = `/uploads/about-img/${req.file.filename}`;
+      
+      // Hapus gambar lama dari server jika ada gambar baru
+      const oldAbout = await aboutService.getAboutById(req.params.id);
+      if (oldAbout && oldAbout.image) {
+        const oldImagePath = path.join(__dirname, '..', oldAbout.image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
     }
 
     const updatedAbout = await aboutService.updateAbout(req.params.id, updateData);
@@ -71,7 +83,18 @@ const updateAbout = async (req, res, next) => {
 
 const deleteAbout = async (req, res, next) => {
   try {
+    const oldAbout = await aboutService.getAboutById(req.params.id);
+    
     await aboutService.deleteAbout(req.params.id);
+    
+    // Hapus gambar fisik dari server jika entri dihapus
+    if (oldAbout && oldAbout.image) {
+      const oldImagePath = path.join(__dirname, '..', oldAbout.image);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
     res.json({ message: 'About entry deleted successfully' });
   } catch (error) {
     next(error);
