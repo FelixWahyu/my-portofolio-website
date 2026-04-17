@@ -44,13 +44,13 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   const status = err.status || 500;
   const message = err.message || 'Something went wrong on the server';
-  
-  res.status(status).json({ 
+
+  res.status(status).json({
     message,
-    errors: err.errors || undefined 
+    errors: err.errors || undefined
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });
