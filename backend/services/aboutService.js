@@ -18,8 +18,8 @@ const createAbout = async (data) => {
     data: {
       description: data.description,
       image: data.image || null,
-      yearExp: data.yearExp ? parseInt(data.yearExp) : null,
-      totalProj: data.totalProj ? parseInt(data.totalProj) : null,
+      yearExp: (data.yearExp !== undefined && data.yearExp !== '' && data.yearExp !== null) ? parseInt(data.yearExp) : null,
+      totalProj: (data.totalProj !== undefined && data.totalProj !== '' && data.totalProj !== null) ? parseInt(data.totalProj) : null,
     }
   });
 };
@@ -27,8 +27,8 @@ const createAbout = async (data) => {
 const updateAbout = async (id, data) => {
   const updateData = {
     description: data.description,
-    yearExp: data.yearExp ? parseInt(data.yearExp) : null,
-    totalProj: data.totalProj ? parseInt(data.totalProj) : null,
+    yearExp: (data.yearExp !== undefined && data.yearExp !== '' && data.yearExp !== null) ? parseInt(data.yearExp) : null,
+    totalProj: (data.totalProj !== undefined && data.totalProj !== '' && data.totalProj !== null) ? parseInt(data.totalProj) : null,
   };
 
   if (data.image) {

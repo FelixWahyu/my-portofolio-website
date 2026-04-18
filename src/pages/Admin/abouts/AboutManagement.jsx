@@ -57,8 +57,8 @@ const AboutManagement = () => {
       setEditingId(about.id);
       setFormData({
         description: about.description,
-        yearExp: about.yearExp || '',
-        totalProj: about.totalProj || '',
+        yearExp: (about.yearExp !== null && about.yearExp !== undefined) ? about.yearExp : '',
+        totalProj: (about.totalProj !== null && about.totalProj !== undefined) ? about.totalProj : '',
         image: null
       });
       setPreviewUrl(about.image ? `${import.meta.env.VITE_API_BASE_URL || ''}${about.image}` : null);
