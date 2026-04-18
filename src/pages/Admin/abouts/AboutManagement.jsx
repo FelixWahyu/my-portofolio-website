@@ -61,7 +61,7 @@ const AboutManagement = () => {
         totalProj: about.totalProj || '',
         image: null
       });
-      setPreviewUrl(about.image ? `http://localhost:3000${about.image}` : null);
+      setPreviewUrl(about.image ? `${import.meta.env.VITE_API_BASE_URL || ''}${about.image}` : null);
     } else {
       setEditingId(null);
       setFormData({
@@ -88,10 +88,21 @@ const AboutManagement = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
       setFormData(prev => ({ ...prev, image: file }));
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,27 +122,22 @@ const AboutManagement = () => {
         await api.put(`/api/abouts/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        Swal.fire({
-          icon: 'success',
-          title: 'Updated!',
-          text: 'About entry has been updated successfully.',
-          timer: 2000,
-          showConfirmButton: false
-        });
       } else {
         await api.post('/api/abouts', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        Swal.fire({
-          icon: 'success',
-          title: 'Created!',
-          text: 'New about entry has been created successfully.',
-          timer: 2000,
-          showConfirmButton: false
-        });
       }
+      
       fetchAbouts();
-      handleCloseModal();
+      Swal.fire({
+        icon: 'success',
+        title: editingId ? 'Updated!' : 'Created!',
+        text: editingId ? 'About entry has been updated successfully.' : 'New about entry has been created successfully.',
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        handleCloseModal();
+      });
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save About entry.');
     } finally {
@@ -230,7 +236,7 @@ const AboutManagement = () => {
                   <div className="md:w-64 bg-slate-50 relative overflow-hidden flex-shrink-0">
                     {about.image ? (
                       <img
-                        src={`http://localhost:3000${about.image}`}
+                        src={`${import.meta.env.VITE_API_BASE_URL || ''}${about.image}`}
                         alt="About"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
