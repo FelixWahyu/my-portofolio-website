@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../utils/axios';
-import { 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  Image as ImageIcon, 
-  Briefcase, 
-  Trophy, 
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Image as ImageIcon,
+  Briefcase,
+  Trophy,
   FileText,
   X,
   Save,
@@ -177,17 +177,14 @@ const AboutManagement = () => {
     <AdminLayout title="About Me Management">
       <div className="flex flex-col min-h-full bg-[#F8FAFC]">
         {/* Page Header Area - Clean White */}
-        <div className="bg-white border-b border-slate-200 p-8 lg:p-12 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm">
+        <div className="bg-white border-b border-slate-200 p-3 lg:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-widest mb-3 border border-blue-100">
-              Personal Bio
-            </div>
             <h2 className="text-3xl font-black text-slate-900 tracking-tight">Management Suite</h2>
             <p className="text-slate-500 font-medium mt-1">Curate your professional journey and key milestones.</p>
           </div>
-          <button 
+          <button
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-2.5 px-8 py-4 bg-blue-600 text-white font-black rounded-[1.25rem] hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group"
+            className="flex items-center gap-2.5 px-6 py-3 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group"
           >
             <Plus size={22} className="transition-transform group-hover:rotate-90" />
             <span>Add New Entry</span>
@@ -219,9 +216,9 @@ const AboutManagement = () => {
               <p className="text-slate-500 max-w-sm mb-12 font-medium leading-relaxed">
                 Connect with your audience by sharing your unique career achievements and background.
               </p>
-              <button 
+              <button
                 onClick={() => handleOpenModal()}
-                className="px-10 py-5 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl shadow-slate-200 active:scale-95"
+                className="px-6 py-3 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl shadow-slate-200 active:scale-95"
               >
                 Create First Entry
               </button>
@@ -232,9 +229,9 @@ const AboutManagement = () => {
                 <div key={about.id} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/40 hover:border-blue-100/50">
                   <div className="md:w-64 bg-slate-50 relative overflow-hidden flex-shrink-0">
                     {about.image ? (
-                      <img 
-                        src={`http://localhost:3000${about.image}`} 
-                        alt="About" 
+                      <img
+                        src={`http://localhost:3000${about.image}`}
+                        alt="About"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
@@ -244,14 +241,14 @@ const AboutManagement = () => {
                     )}
                     {/* Actions Bar - Visible on mobile, hover on desktop */}
                     <div className="absolute inset-0 flex items-center justify-center gap-4 transition-all duration-500 lg:opacity-0 lg:group-hover:opacity-100 lg:bg-white/60 lg:backdrop-blur-md">
-                      <button 
+                      <button
                         onClick={() => handleOpenModal(about)}
                         className="p-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all transform hover:scale-110 active:scale-90 shadow-xl shadow-blue-500/20"
                         title="Edit Entry"
                       >
                         <Edit2 size={22} />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(about.id)}
                         className="p-4 bg-white text-red-600 border border-red-50 rounded-2xl hover:bg-red-600 hover:text-white transition-all transform hover:scale-110 active:scale-90 shadow-xl"
                         title="Delete Entry"
@@ -264,12 +261,12 @@ const AboutManagement = () => {
                     <div>
                       <div className="flex flex-wrap items-center gap-3 mb-8">
                         <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] border border-blue-100/50">
-                          <Briefcase size={14} className="opacity-70" />
-                          <span>{about.yearExp || 0} Yrs</span>
+                          <Briefcase size={16} className="opacity-70" />
+                          <span className='text-xs'>{about.yearExp || 0} Yrs</span>
                         </div>
                         <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] border border-indigo-100/50">
-                          <Trophy size={14} className="opacity-70" />
-                          <span>{about.totalProj || 0} Proj</span>
+                          <Trophy size={16} className="opacity-70" />
+                          <span className='text-xs'>{about.totalProj || 0} Proj</span>
                         </div>
                       </div>
                       <p className="text-slate-600 line-clamp-5 text-base leading-[1.8] mb-8 font-medium">
@@ -293,7 +290,7 @@ const AboutManagement = () => {
       {/* Modern Modal Overlay - Refined Light Theme */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-[100] flex items-center justify-center p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
-          <div 
+          <div
             className="bg-white w-full max-w-4xl rounded-[3rem] shadow-[0_32px_128px_-16px_rgba(0,0,0,0.15)] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-12 duration-700 my-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -308,20 +305,20 @@ const AboutManagement = () => {
                 </h2>
                 <p className="text-slate-500 font-medium mt-2">Adjust your presence and verify information quality.</p>
               </div>
-              <button 
-                onClick={handleCloseModal} 
+              <button
+                onClick={handleCloseModal}
                 className="p-4 text-slate-400 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-100 rounded-[1.25rem] transition-all shadow-sm hover:shadow-xl active:scale-95"
               >
                 <X size={28} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-10 md:p-14 lg:p-16">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
                 {/* Visual Block */}
                 <div className="space-y-6">
                   <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Visual Identity</label>
-                  <div 
+                  <div
                     onClick={() => document.getElementById('imageInput').click()}
                     className="aspect-square w-full rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group relative overflow-hidden shadow-inner"
                   >
@@ -344,10 +341,10 @@ const AboutManagement = () => {
                       </div>
                     )}
                   </div>
-                  <input 
-                    type="file" 
-                    id="imageInput" 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    id="imageInput"
+                    className="hidden"
                     accept="image/*"
                     onChange={handleFileChange}
                   />
@@ -361,8 +358,8 @@ const AboutManagement = () => {
                       <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-all duration-300 group-focus-within:scale-110">
                         <Briefcase size={22} />
                       </div>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         name="yearExp"
                         value={formData.yearExp}
                         onChange={handleInputChange}
@@ -378,8 +375,8 @@ const AboutManagement = () => {
                       <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-all duration-300 group-focus-within:scale-110">
                         <Trophy size={22} />
                       </div>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         name="totalProj"
                         value={formData.totalProj}
                         onChange={handleInputChange}
@@ -395,7 +392,7 @@ const AboutManagement = () => {
               {/* Description Block */}
               <div className="space-y-4 mb-14">
                 <label className="block text-[11px] font-black text-[rgba(15,23,42,0.4)] uppercase tracking-[0.25em] ml-2">Narrative Architecture</label>
-                <textarea 
+                <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
@@ -408,15 +405,15 @@ const AboutManagement = () => {
 
               {/* Action Bar */}
               <div className="flex flex-col md:flex-row gap-5">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={handleCloseModal}
                   className="flex-1 px-10 py-6 bg-slate-100 text-slate-600 font-black rounded-[1.75rem] hover:bg-slate-200 transition-all active:scale-95 text-base tracking-tight"
                 >
                   Cancel Edit
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isSubmitting}
                   className="flex-[2] flex items-center justify-center gap-4 px-10 py-6 bg-slate-900 text-white font-black rounded-[1.75rem] hover:bg-blue-600 transition-all shadow-2xl shadow-slate-200 active:scale-98 disabled:opacity-50 disabled:scale-100 group text-lg"
                 >

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { 
-  Projector, 
-  Cpu, 
-  Users, 
-  ArrowUpRight, 
-  PlusCircle, 
-  UserPen 
+import {
+  Projector,
+  Cpu,
+  Users,
+  ArrowUpRight,
+  PlusCircle,
+  UserPen
 } from 'lucide-react';
 import AdminLayout from '../../components/Admin/AdminLayout';
 
@@ -15,24 +15,24 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   const stats = [
-    { 
-      label: 'Total Projects', 
-      value: '12', 
-      icon: <Projector className="text-blue-600" size={24} />, 
+    {
+      label: 'Total Projects',
+      value: '12',
+      icon: <Projector className="text-blue-600" size={24} />,
       color: 'bg-blue-50',
       trend: '+2 this month'
     },
-    { 
-      label: 'Total Skills', 
-      value: '24', 
-      icon: <Cpu className="text-indigo-600" size={24} />, 
+    {
+      label: 'Total Skills',
+      value: '24',
+      icon: <Cpu className="text-indigo-600" size={24} />,
       color: 'bg-indigo-50',
       trend: 'Expert level'
     },
-    { 
-      label: 'Active Sessions', 
-      value: '1', 
-      icon: <Users className="text-emerald-600" size={24} />, 
+    {
+      label: 'Active Sessions',
+      value: '1',
+      icon: <Users className="text-emerald-600" size={24} />,
       color: 'bg-emerald-50',
       trend: 'Current user'
     },
@@ -49,7 +49,7 @@ const Dashboard = () => {
               System Online
             </div>
             <h2 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-6">
-              Welcome back, <br/>
+              Welcome back, <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                 {user?.name || 'Administrator'}
               </span>
@@ -76,10 +76,10 @@ const Dashboard = () => {
                     <ArrowUpRight size={20} />
                   </div>
                 </div>
-                <h3 className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">{stat.label}</h3>
+                <h3 className="text-slate-400 text-md font-black uppercase tracking-[0.2em]">{stat.label}</h3>
                 <div className="flex items-baseline gap-3 mt-2">
                   <span className="text-4xl font-black text-slate-900 tracking-tight">{stat.value}</span>
-                  <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-tighter border border-emerald-100">{stat.trend}</span>
+                  <span className="text-md font-black text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-tighter border border-emerald-100">{stat.trend}</span>
                 </div>
               </div>
               {/* Subtle accent line */}
@@ -95,11 +95,11 @@ const Dashboard = () => {
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <button className="flex items-center justify-center gap-3 px-8 py-6 bg-slate-900 text-white font-black rounded-3xl hover:bg-black transition-all shadow-xl shadow-slate-200 active:scale-95 group">
+              <button className="flex items-center justify-center gap-3 px-6 py-3 bg-slate-900 text-white font-black rounded-lg hover:bg-black transition-all shadow-xl shadow-slate-200 active:scale-95 group">
                 <PlusCircle size={24} className="transition-transform group-hover:rotate-90" />
                 New Project
               </button>
-              <Link to="/admin/abouts" className="flex items-center justify-center gap-3 px-8 py-6 bg-white text-slate-900 font-black rounded-3xl hover:bg-slate-50 transition-all active:scale-95 border border-slate-200 shadow-sm hover:border-slate-300">
+              <Link to="/admin/abouts" className="flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-900 font-black rounded-lg hover:bg-slate-50 transition-all active:scale-95 border border-slate-200 shadow-sm hover:border-slate-300">
                 <UserPen size={24} className="text-blue-600" />
                 Manage Bio
               </Link>

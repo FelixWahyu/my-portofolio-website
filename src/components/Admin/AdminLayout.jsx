@@ -43,7 +43,7 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
     <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-slate-900">
       {/* Overlay for mobile */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={() => setIsMobileMenuOpen(false)}
         />
@@ -61,7 +61,7 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
             </div>
             <span className="text-xl font-black tracking-tight text-slate-900">Admin<span className="text-blue-600">Panel</span></span>
           </div>
-          <button 
+          <button
             className="lg:hidden p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -80,8 +80,8 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
               {({ isActive }) => (
                 <div className={cn(
                   "flex items-center gap-3.5 w-full p-3.5 rounded-2xl transition-all duration-300 group relative",
-                  isActive 
-                    ? "bg-blue-50 text-blue-600 font-bold" 
+                  isActive
+                    ? "bg-blue-50 text-blue-600 font-bold"
                     : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                 )}>
                   <div className={cn(
@@ -102,7 +102,7 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
         </nav>
 
         <div className="p-6 border-t border-slate-50">
-          <button 
+          <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 p-4 bg-white text-red-500 hover:bg-red-50 hover:border-red-100 rounded-2xl transition-all duration-300 font-bold border border-slate-100 group shadow-sm active:scale-[0.98]"
           >
@@ -117,7 +117,7 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
         {/* Header - Transparent/White */}
         <header className="bg-white/70 backdrop-blur-xl border-b border-slate-200 p-4 flex justify-between items-center px-6 lg:px-10 h-20 sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden p-3 bg-white border border-slate-100 text-slate-600 rounded-2xl hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
               onClick={() => setIsMobileMenuOpen(true)}
             >
@@ -131,8 +131,8 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
 
           <div className="flex items-center gap-5">
             <div className="hidden sm:block text-right">
-              <div className="text-sm font-black text-slate-900 leading-tight">{user?.name || 'Admin'}</div>
-              <div className="text-[11px] text-slate-400 font-bold tracking-tight">{user?.email || 'admin@example.com'}</div>
+              <div className="text-md font-black text-slate-900 leading-tight">{user?.name || 'Admin'}</div>
+              <div className="text-sm text-slate-400 font-bold tracking-tight">{user?.email || 'admin@example.com'}</div>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 p-1 shadow-sm hover:border-blue-200 transition-colors group cursor-pointer">
               <div className="w-full h-full rounded-[10px] bg-slate-50 flex items-center justify-center text-slate-600 font-black text-lg group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
@@ -141,7 +141,7 @@ const AdminLayout = ({ children, title = 'Admin Panel' }) => {
             </div>
           </div>
         </header>
-        
+
         {/* Page Content */}
         <main className="flex-1 overflow-x-hidden">
           {children}
