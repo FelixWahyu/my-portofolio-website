@@ -19,12 +19,11 @@ import Swal from 'sweetalert2';
 
 const AboutManagement = () => {
   const { user } = useAuth();
-  const [abouts, setAbouts] = useState([]);
+  const [about, setAbout] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [editingId, setEditingId] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -35,26 +34,26 @@ const AboutManagement = () => {
   });
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  const fetchAbouts = async () => {
+  const fetchAbout = async () => {
     try {
       setLoading(true);
       const response = await api.get('/api/abouts');
-      setAbouts(response.data);
+      // If response.data is an empty object or has no id, set to null
+      setAbout(response.data?.id ? response.data : null);
       setError(null);
     } catch (err) {
-      setError('Failed to fetch About entries. Please try again.');
+      setError('Failed to fetch About data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAbouts();
+    fetchAbout();
   }, []);
 
-  const handleOpenModal = (about = null) => {
+  const handleOpenModal = () => {
     if (about) {
-      setEditingId(about.id);
       setFormData({
         description: about.description,
         yearExp: (about.yearExp !== null && about.yearExp !== undefined) ? about.yearExp : '',
@@ -63,7 +62,6 @@ const AboutManagement = () => {
       });
       setPreviewUrl(about.image ? `${import.meta.env.VITE_API_BASE_URL || ''}${about.image}` : null);
     } else {
-      setEditingId(null);
       setFormData({
         description: '',
         yearExp: '',
@@ -77,7 +75,6 @@ const AboutManagement = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setEditingId(null);
   };
 
   const handleInputChange = (e) => {
@@ -118,182 +115,140 @@ const AboutManagement = () => {
     }
 
     try {
-      if (editingId) {
-        await api.put(`/api/abouts/${editingId}`, data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-      } else {
-        await api.post('/api/abouts', data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-      }
+      await api.post('/api/abouts', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       
-      fetchAbouts();
+      await fetchAbout();
       Swal.fire({
         icon: 'success',
-        title: editingId ? 'Updated!' : 'Created!',
-        text: editingId ? 'About entry has been updated successfully.' : 'New about entry has been created successfully.',
+        title: 'Success!',
+        text: 'About Me information has been updated.',
         timer: 2000,
         showConfirmButton: false
       }).then(() => {
         handleCloseModal();
       });
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save About entry.');
+      setError(err.response?.data?.message || 'Failed to save About data.');
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: 'Delete Entry?',
-      text: "This action cannot be undone!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#f1f5f9',
-      confirmButtonText: 'Yes, Delete it',
-      cancelButtonText: 'Cancel',
-      customClass: {
-        confirmButton: 'px-6 py-2.5 rounded-xl font-bold bg-red-600 text-white',
-        cancelButton: 'px-6 py-2.5 rounded-xl font-bold text-slate-600 border border-slate-200'
-      },
-      buttonsStyling: false
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await api.delete(`/api/abouts/${id}`);
-        Swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: 'The entry has been deleted.',
-          timer: 1500,
-          showConfirmButton: false
-        });
-        fetchAbouts();
-      } catch (err) {
-        Swal.fire('Error', 'Failed to delete entry.', 'error');
-      }
     }
   };
 
   return (
     <AdminLayout title="About Me Management">
       <div className="flex flex-col min-h-full bg-[#F8FAFC]">
-        {/* Page Header Area - Clean White */}
+        {/* Page Header Area */}
         <div className="bg-white border-b border-slate-200 p-3 lg:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm">
           <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Management Suite</h2>
-            <p className="text-slate-500 font-medium mt-1">Curate your professional journey and key milestones.</p>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Personal Narrative</h2>
+            <p className="text-slate-500 font-medium mt-1">Manage your professional story and core statistics in one place.</p>
           </div>
-          <button
-            onClick={() => handleOpenModal()}
-            className="flex items-center gap-2.5 px-6 py-3 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group"
-          >
-            <Plus size={22} className="transition-transform group-hover:rotate-90" />
-            <span>Add New Entry</span>
-          </button>
+          {about && (
+            <button
+              onClick={handleOpenModal}
+              className="flex items-center gap-2.5 px-6 py-3 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 group"
+            >
+              <Edit2 size={20} />
+              <span>Update About Me</span>
+            </button>
+          )}
         </div>
 
         {/* Main Content */}
-        <div className="p-6 lg:p-10">
+        <div className="p-6 lg:p-10 flex-1 flex flex-col">
           {error && (
-            <div className="mb-8 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600 animate-in fade-in slide-in-from-top-2">
+            <div className="mb-8 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
               <AlertCircle size={20} />
               <p className="font-bold text-sm">{error}</p>
             </div>
           )}
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-[50vh] text-slate-400">
+            <div className="flex flex-col items-center justify-center flex-1 py-20 text-slate-400">
               <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-lg border border-slate-100 mb-6">
                 <Loader2 className="animate-spin text-blue-600" size={32} />
               </div>
-              <p className="font-black text-xs uppercase tracking-[0.3em]">Syncing Records</p>
+              <p className="font-black text-xs uppercase tracking-[0.3em]">Syncing Record</p>
             </div>
-          ) : abouts.length === 0 ? (
-            <div className="bg-white rounded-[3rem] border-2 border-dashed border-slate-200 p-20 flex flex-col items-center justify-center text-center shadow-sm">
+          ) : !about ? (
+            <div className="bg-white rounded-[3rem] border-2 border-dashed border-slate-200 p-20 flex flex-col items-center justify-center text-center shadow-sm my-auto">
               <div className="w-28 h-28 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mb-10 border border-slate-100 shadow-inner">
                 <FileText size={56} className="text-slate-300" />
               </div>
-              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">No historical data</h3>
+              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">No Narrative Found</h3>
               <p className="text-slate-500 max-w-sm mb-12 font-medium leading-relaxed">
                 Connect with your audience by sharing your unique career achievements and background.
               </p>
               <button
-                onClick={() => handleOpenModal()}
-                className="px-6 py-3 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl shadow-slate-200 active:scale-95"
+                onClick={handleOpenModal}
+                className="px-8 py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl shadow-slate-200 active:scale-95 flex items-center gap-3"
               >
-                Create First Entry
+                <Plus size={24} />
+                <span>Create About Me</span>
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-              {abouts.map((about) => (
-                <div key={about.id} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/40 hover:border-blue-100/50">
-                  <div className="md:w-64 bg-slate-50 relative overflow-hidden flex-shrink-0">
-                    {about.image ? (
-                      <img
-                        src={`${import.meta.env.VITE_API_BASE_URL || ''}${about.image}`}
-                        alt="About"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-200">
-                        <ImageIcon size={64} strokeWidth={1} />
-                      </div>
-                    )}
-                    {/* Actions Bar - Visible on mobile, hover on desktop */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-4 transition-all duration-500 lg:opacity-0 lg:group-hover:opacity-100 lg:bg-white/60 lg:backdrop-blur-md">
-                      <button
-                        onClick={() => handleOpenModal(about)}
-                        className="p-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all transform hover:scale-110 active:scale-90 shadow-xl shadow-blue-500/20"
-                        title="Edit Entry"
-                      >
-                        <Edit2 size={22} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(about.id)}
-                        className="p-4 bg-white text-red-600 border border-red-50 rounded-2xl hover:bg-red-600 hover:text-white transition-all transform hover:scale-110 active:scale-90 shadow-xl"
-                        title="Delete Entry"
-                      >
-                        <Trash2 size={22} />
-                      </button>
+            <div className="max-w-5xl mx-auto w-full">
+              <div className="bg-white rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden flex flex-col lg:flex-row group animate-in fade-in zoom-in-95 duration-700">
+                {/* Image Section */}
+                <div className="lg:w-[40%] bg-slate-50 relative overflow-hidden flex-shrink-0 min-h-[400px]">
+                  {about.image ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_BASE_URL || ''}${about.image}`}
+                      alt="About"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-200 bg-slate-100">
+                      <ImageIcon size={100} strokeWidth={1} />
                     </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                </div>
+
+                {/* Content Section */}
+                <div className="flex-1 p-10 lg:p-14 flex flex-col justify-between bg-white">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-4 mb-10">
+                      <div className="flex items-center gap-3 px-6 py-3 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100/50">
+                        <Briefcase size={20} className="opacity-70" />
+                        <span className='font-black text-sm uppercase tracking-wider'>{about.yearExp || 0} Years Experience</span>
+                      </div>
+                      <div className="flex items-center gap-3 px-6 py-3 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100/50">
+                        <Trophy size={20} className="opacity-70" />
+                        <span className='font-black text-sm uppercase tracking-wider'>{about.totalProj || 0} Projects Completed</span>
+                      </div>
+                    </div>
+                    
+                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] mb-4">Professional Story</h3>
+                    <p className="text-slate-600 text-xl leading-[1.8] mb-12 font-medium whitespace-pre-line">
+                      {about.description}
+                    </p>
                   </div>
-                  <div className="flex-1 p-10 flex flex-col justify-between">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-3 mb-8">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] border border-blue-100/50">
-                          <Briefcase size={16} className="opacity-70" />
-                          <span className='text-xs'>{about.yearExp || 0} Yrs</span>
-                        </div>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] border border-indigo-100/50">
-                          <Trophy size={16} className="opacity-70" />
-                          <span className='text-xs'>{about.totalProj || 0} Proj</span>
-                        </div>
-                      </div>
-                      <p className="text-slate-600 line-clamp-5 text-base leading-[1.8] mb-8 font-medium">
-                        {about.description}
-                      </p>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-6">
+                    <div className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] flex items-center gap-3">
+                      <span className="w-3 h-3 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/40 animate-pulse" />
+                      Content Live • Last Updated {new Date(about.updatedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
                     </div>
-                    <div className="flex items-center justify-between border-t border-slate-50 pt-6">
-                      <div className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] flex items-center gap-2.5">
-                        <span className="w-2 h-2 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/30" />
-                        Synced {new Date(about.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </div>
-                    </div>
+                    <button
+                      onClick={handleOpenModal}
+                      className="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-blue-600 transition-all active:scale-95 shadow-lg shadow-slate-200 flex items-center justify-center gap-3"
+                    >
+                      <Edit2 size={18} />
+                      Edit Narrative
+                    </button>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Modern Modal Overlay - Refined Light Theme */}
+      {/* Modal - The same form as before but simplified labels */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-[100] flex items-center justify-center p-4 md:p-10 animate-in fade-in duration-500 overflow-y-auto">
           <div
@@ -307,9 +262,9 @@ const AboutManagement = () => {
                   Record Editor
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                  {editingId ? 'Refining Assets' : 'New Publication'}
+                  {about ? 'Refining Your Story' : 'Creating Your Profile'}
                 </h2>
-                <p className="text-slate-500 font-medium mt-2">Adjust your presence and verify information quality.</p>
+                <p className="text-slate-500 font-medium mt-2">Adjust your professional presence and key metrics.</p>
               </div>
               <button
                 onClick={handleCloseModal}
@@ -323,7 +278,7 @@ const AboutManagement = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
                 {/* Visual Block */}
                 <div className="space-y-6">
-                  <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Visual Identity</label>
+                  <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Profile Image</label>
                   <div
                     onClick={() => document.getElementById('imageInput').click()}
                     className="aspect-square w-full rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group relative overflow-hidden shadow-inner"
@@ -334,7 +289,7 @@ const AboutManagement = () => {
                         <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                           <div className="bg-white p-4 rounded-2xl text-blue-600 font-black shadow-2xl flex items-center gap-3 transform translate-y-6 group-hover:translate-y-0 transition-all duration-500 scale-90 group-hover:scale-100">
                             <ImageIcon size={22} />
-                            <span>Replace Media</span>
+                            <span>Replace Image</span>
                           </div>
                         </div>
                       </>
@@ -343,7 +298,7 @@ const AboutManagement = () => {
                         <div className="w-20 h-20 bg-white rounded-[1.5rem] flex items-center justify-center text-slate-300 group-hover:text-blue-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-sm border border-slate-100">
                           <Plus size={40} />
                         </div>
-                        <span className="text-[10px] font-black text-slate-400 group-hover:text-blue-700 uppercase tracking-widest">Connect Asset</span>
+                        <span className="text-[10px] font-black text-slate-400 group-hover:text-blue-700 uppercase tracking-widest">Add Media</span>
                       </div>
                     )}
                   </div>
@@ -376,7 +331,7 @@ const AboutManagement = () => {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Output Metric</label>
+                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Projects Completed</label>
                     <div className="relative group">
                       <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-all duration-300 group-focus-within:scale-110">
                         <Trophy size={22} />
@@ -397,13 +352,13 @@ const AboutManagement = () => {
 
               {/* Description Block */}
               <div className="space-y-4 mb-14">
-                <label className="block text-[11px] font-black text-[rgba(15,23,42,0.4)] uppercase tracking-[0.25em] ml-2">Narrative Architecture</label>
+                <label className="block text-[11px] font-black text-[rgba(15,23,42,0.4)] uppercase tracking-[0.25em] ml-2">Bio / Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  rows={6}
-                  placeholder="Detail your professional trajectory with precision..."
+                  rows={8}
+                  placeholder="Tell your professional story..."
                   className="w-full p-8 rounded-[2.5rem] border border-slate-200 bg-[#FBFDFF] focus:bg-white focus:border-blue-600 focus:ring-[12px] focus:ring-blue-600/2 focus:shadow-xl transition-all outline-none font-medium text-slate-700 leading-[1.8] placeholder:text-slate-300 placeholder:font-bold text-lg shadow-inner"
                   required
                 ></textarea>
@@ -416,7 +371,7 @@ const AboutManagement = () => {
                   onClick={handleCloseModal}
                   className="flex-1 px-10 py-6 bg-slate-100 text-slate-600 font-black rounded-[1.75rem] hover:bg-slate-200 transition-all active:scale-95 text-base tracking-tight"
                 >
-                  Cancel Edit
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -428,7 +383,7 @@ const AboutManagement = () => {
                   ) : (
                     <Save size={24} className="transition-transform group-hover:-translate-y-1 duration-300" />
                   )}
-                  <span>{editingId ? 'Push Final Version' : 'Initiate Publication'}</span>
+                  <span>{about ? 'Save Changes' : 'Create Profile'}</span>
                 </button>
               </div>
             </form>
@@ -438,6 +393,7 @@ const AboutManagement = () => {
     </AdminLayout>
   );
 };
+
 
 export default AboutManagement;
 

@@ -38,15 +38,15 @@ const upload = multer({
 });
 
 // Routes
-// Public route (if needed in future)
-router.get('/', aboutController.getAbouts);
+// Public route
+router.get('/', aboutController.getAbout);
 
 // Protected routes
 router.use(verifyAuth); // Protect all write operations
 
-router.get('/:id', aboutController.getAboutById);
-router.post('/', upload.single('image'), aboutController.createAbout);
-router.put('/:id', upload.single('image'), aboutController.updateAbout);
-router.delete('/:id', aboutController.deleteAbout);
+router.post('/', upload.single('image'), aboutController.updateAbout);
+router.put('/', upload.single('image'), aboutController.updateAbout);
+router.delete('/', aboutController.deleteAbout);
 
 module.exports = router;
+
