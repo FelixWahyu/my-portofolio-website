@@ -2,46 +2,11 @@ const aboutService = require('../services/aboutService');
 const fs = require('fs');
 const path = require('path');
 
-
-const getAbouts = async (req, res, next) => {
+const getAbout = async (req, res, next) => {
   try {
-    const abouts = await aboutService.getAbouts();
-    res.json(abouts);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getAboutById = async (req, res, next) => {
-  try {
-    const about = await aboutService.getAboutById(req.params.id);
-    if (!about) {
-      return res.status(404).json({ message: 'About entry not found' });
-    }
-    res.json(about);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const createAbout = async (req, res, next) => {
-  try {
-    const { description, yearExp, totalProj } = req.body;
-    
-    if (!description) {
-      return res.status(400).json({ message: 'Description is required' });
-    }
-
-    const imagePath = req.file ? `/uploads/about-img/${req.file.filename}` : null;
-
-    const about = await aboutService.createAbout({
-      description,
-      image: imagePath,
-      yearExp,
-      totalProj
-    });
-
-    res.status(201).json(about);
+    const about = await aboutService.getAbout();
+    // Return null or empty object if not found, but usually we return the object
+    res.json(about || {});
   } catch (error) {
     next(error);
   }
@@ -50,7 +15,7 @@ const createAbout = async (req, res, next) => {
 const updateAbout = async (req, res, next) => {
   try {
     const { description, yearExp, totalProj } = req.body;
-    
+
     if (!description) {
       return res.status(400).json({ message: 'Description is required' });
     }
@@ -63,9 +28,9 @@ const updateAbout = async (req, res, next) => {
 
     if (req.file) {
       updateData.image = `/uploads/about-img/${req.file.filename}`;
-      
+
       // Hapus gambar lama dari server jika ada gambar baru
-      const oldAbout = await aboutService.getAboutById(req.params.id);
+      const oldAbout = await aboutService.getAbout();
       if (oldAbout && oldAbout.image) {
         const oldImagePath = path.join(__dirname, '..', oldAbout.image);
         if (fs.existsSync(oldImagePath)) {
@@ -74,7 +39,7 @@ const updateAbout = async (req, res, next) => {
       }
     }
 
-    const updatedAbout = await aboutService.updateAbout(req.params.id, updateData);
+    const updatedAbout = await aboutService.upsertAbout(updateData);
     res.json(updatedAbout);
   } catch (error) {
     next(error);
@@ -83,15 +48,17 @@ const updateAbout = async (req, res, next) => {
 
 const deleteAbout = async (req, res, next) => {
   try {
-    const oldAbout = await aboutService.getAboutById(req.params.id);
-    
-    await aboutService.deleteAbout(req.params.id);
-    
-    // Hapus gambar fisik dari server jika entri dihapus
-    if (oldAbout && oldAbout.image) {
-      const oldImagePath = path.join(__dirname, '..', oldAbout.image);
-      if (fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath);
+    const oldAbout = await aboutService.getAbout();
+
+    if (oldAbout) {
+      await aboutService.deleteAbout(oldAbout.id);
+
+      // Hapus gambar fisik dari server jika entri dihapus
+      if (oldAbout.image) {
+        const oldImagePath = path.join(__dirname, '..', oldAbout.image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
       }
     }
 
@@ -102,9 +69,8 @@ const deleteAbout = async (req, res, next) => {
 };
 
 module.exports = {
-  getAbouts,
-  getAboutById,
-  createAbout,
+  getAbout,
   updateAbout,
   deleteAbout
 };
+

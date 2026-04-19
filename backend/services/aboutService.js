@@ -1,43 +1,42 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-const getAbouts = async () => {
-  return await prisma.about.findMany({
+const getAbout = async () => {
+  return await prisma.about.findFirst({
     orderBy: { createdAt: 'desc' }
   });
+};
+
+const upsertAbout = async (data) => {
+  const existingAbout = await prisma.about.findFirst({
+    orderBy: { createdAt: 'asc' }
+  });
+
+  const aboutData = {
+    description: data.description,
+    yearExp: (data.yearExp !== undefined && data.yearExp !== '' && data.yearExp !== null) ? parseInt(String(data.yearExp), 10) : null,
+    totalProj: (data.totalProj !== undefined && data.totalProj !== '' && data.totalProj !== null) ? parseInt(String(data.totalProj), 10) : null,
+  };
+
+  if (data.image) {
+    aboutData.image = data.image;
+  }
+
+  if (existingAbout) {
+    return await prisma.about.update({
+      where: { id: existingAbout.id },
+      data: aboutData
+    });
+  } else {
+    return await prisma.about.create({
+      data: aboutData
+    });
+  }
 };
 
 const getAboutById = async (id) => {
   return await prisma.about.findUnique({
     where: { id: parseInt(id) }
-  });
-};
-
-const createAbout = async (data) => {
-  return await prisma.about.create({
-    data: {
-      description: data.description,
-      image: data.image || null,
-      yearExp: (data.yearExp !== undefined && data.yearExp !== '' && data.yearExp !== null) ? parseInt(data.yearExp) : null,
-      totalProj: (data.totalProj !== undefined && data.totalProj !== '' && data.totalProj !== null) ? parseInt(data.totalProj) : null,
-    }
-  });
-};
-
-const updateAbout = async (id, data) => {
-  const updateData = {
-    description: data.description,
-    yearExp: (data.yearExp !== undefined && data.yearExp !== '' && data.yearExp !== null) ? parseInt(data.yearExp) : null,
-    totalProj: (data.totalProj !== undefined && data.totalProj !== '' && data.totalProj !== null) ? parseInt(data.totalProj) : null,
-  };
-
-  if (data.image) {
-    updateData.image = data.image;
-  }
-
-  return await prisma.about.update({
-    where: { id: parseInt(id) },
-    data: updateData
   });
 };
 
@@ -48,9 +47,9 @@ const deleteAbout = async (id) => {
 };
 
 module.exports = {
-  getAbouts,
+  getAbout,
+  upsertAbout,
   getAboutById,
-  createAbout,
-  updateAbout,
   deleteAbout
 };
+
