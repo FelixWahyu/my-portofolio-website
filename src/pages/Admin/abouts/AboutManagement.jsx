@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../utils/axios';
+import { getImageUrl } from '../../../utils/image';
 import {
   Plus,
   Edit2,
@@ -60,7 +61,7 @@ const AboutManagement = () => {
         totalProj: (about.totalProj !== null && about.totalProj !== undefined) ? about.totalProj : '',
         image: null
       });
-      setPreviewUrl(about.image ? `${import.meta.env.VITE_API_BASE_URL || ''}${about.image}` : null);
+      setPreviewUrl(about.image ? getImageUrl(about.image) : null);
     } else {
       setFormData({
         description: '',
@@ -196,9 +197,9 @@ const AboutManagement = () => {
                 <div className="lg:w-[40%] bg-slate-50 relative overflow-hidden flex-shrink-0 min-h-[400px]">
                   {about.image ? (
                     <img
-                      src={`${import.meta.env.VITE_API_BASE_URL || ''}${about.image}`}
-                      alt="About"
-                      className="w-full h-full object-cover"
+                      src={getImageUrl(about.image)}
+                      alt="Profile"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-200 bg-slate-100">

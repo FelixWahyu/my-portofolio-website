@@ -1,6 +1,14 @@
 const aboutService = require('../services/aboutService');
 const fs = require('fs');
 const path = require('path');
+const { z } = require('zod');
+
+// Schema validation for About
+const AboutSchema = z.object({
+  description: z.string().min(1, 'Description is required'),
+  yearExp: z.coerce.number().int().nonnegative('Years of experience cannot be negative').optional(),
+  totalProj: z.coerce.number().int().nonnegative('Total projects cannot be negative').optional(),
+});
 
 const getAbout = async (req, res, next) => {
   try {
@@ -14,16 +22,13 @@ const getAbout = async (req, res, next) => {
 
 const updateAbout = async (req, res, next) => {
   try {
-    const { description, yearExp, totalProj } = req.body;
-
-    if (!description) {
-      return res.status(400).json({ message: 'Description is required' });
-    }
+    // Validate request body using Zod
+    const validatedData = AboutSchema.parse(req.body);
 
     const updateData = {
-      description,
-      yearExp,
-      totalProj
+      description: validatedData.description,
+      yearExp: validatedData.yearExp,
+      totalProj: validatedData.totalProj
     };
 
     if (req.file) {
@@ -42,9 +47,16 @@ const updateAbout = async (req, res, next) => {
     const updatedAbout = await aboutService.upsertAbout(updateData);
     res.json(updatedAbout);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ 
+        message: 'Validation failed', 
+        errors: error.errors.map(err => ({ field: err.path[0], message: err.message })) 
+      });
+    }
     next(error);
   }
 };
+
 
 const deleteAbout = async (req, res, next) => {
   try {

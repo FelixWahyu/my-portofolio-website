@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { User, Loader2 } from "lucide-react";
 import GitHubStats from "./Githubstat";
 import api from "../../utils/axios";
+import { getImageUrl } from "../../utils/image";
 
 
 
@@ -68,7 +69,7 @@ function AboutSection() {
                 <div className="aspect-[4/5] rounded-[3.5rem] overflow-hidden border-8 border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] relative z-10 transition-all duration-700 group-hover:shadow-[0_48px_80px_-16px_rgba(59,130,246,0.15)] group-hover:-translate-y-2">
                   {about.image ? (
                     <img 
-                      src={`${import.meta.env.VITE_API_BASE_URL || ''}${about.image}`} 
+                      src={getImageUrl(about.image)} 
                       alt="Professional Portrait" 
                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                     />
