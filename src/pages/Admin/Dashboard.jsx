@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import api from '../../utils/axios';
 import {
   Projector,
   Cpu,
@@ -13,14 +14,28 @@ import AdminLayout from '../../components/Admin/AdminLayout';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const [projectCount, setProjectCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await api.get('/api/projects');
+        setProjectCount(response.data.length);
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+      }
+    };
+    fetchStats();
+  }, []);
+
 
   const stats = [
     {
       label: 'Total Projects',
-      value: '12',
+      value: projectCount.toString(),
       icon: <Projector className="text-blue-600" size={24} />,
       color: 'bg-blue-50',
-      trend: '+2 this month'
+      trend: 'From database'
     },
     {
       label: 'Total Skills',
@@ -95,10 +110,10 @@ const Dashboard = () => {
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <button className="flex items-center justify-center gap-3 px-6 py-3 bg-slate-900 text-white font-black rounded-lg hover:bg-black transition-all shadow-xl shadow-slate-200 active:scale-95 group">
+              <Link to="/admin/projects" className="flex items-center justify-center gap-3 px-6 py-3 bg-slate-900 text-white font-black rounded-lg hover:bg-black transition-all shadow-xl shadow-slate-200 active:scale-95 group">
                 <PlusCircle size={24} className="transition-transform group-hover:rotate-90" />
                 New Project
-              </button>
+              </Link>
               <Link to="/admin/abouts" className="flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-900 font-black rounded-lg hover:bg-slate-50 transition-all active:scale-95 border border-slate-200 shadow-sm hover:border-slate-300">
                 <UserPen size={24} className="text-blue-600" />
                 Manage Bio
