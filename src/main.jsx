@@ -6,6 +6,7 @@ import Index from "./pages";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import Dashboard from "./pages/Admin/Dashboard";
 import AboutManagement from "./pages/Admin/abouts/AboutManagement";
+import ProjectManagement from "./pages/Admin/projects/ProjectManagement";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -32,6 +33,14 @@ createRoot(document.getElementById("root")).render(
             element={
               <ProtectedRoute>
                 <AboutManagement />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/projects" 
+            element={
+              <ProtectedRoute>
+                <ProjectManagement />
               </ProtectedRoute>
             } 
           />

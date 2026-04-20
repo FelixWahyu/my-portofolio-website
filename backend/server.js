@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const aboutRoutes = require('./routes/aboutRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 const path = require('path');
 
 dotenv.config();
@@ -34,6 +35,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth/login', loginLimiter); // Apply limiter specifically to login
 app.use('/api/auth', authRoutes);
 app.use('/api/abouts', aboutRoutes);
+app.use('/api/projects', projectRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Portfolio Backend API is running');
